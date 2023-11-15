@@ -1,5 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import FilmItem from '../../Components/FilmItem/FilmItem';
+import AddFilmForm from '../../Components/AddFilmForm/AddFilmForm';
+import {Film} from '../../types';
 
 const FilmsTracker = () => {
 
@@ -10,7 +12,6 @@ const FilmsTracker = () => {
   ]);
 
   useEffect(() => {
-    console.log(films)
   }, [films]);
 
   const deleteFilmItem = (id: number) => {
@@ -28,9 +29,14 @@ const FilmsTracker = () => {
       return filmObject;
     }));
   };
+  
+  const onAddFilm = (film: Film) => {
+    setFilms([...films, film]);
+  };
 
   return (
     <>
+      <AddFilmForm onAddFilm={onAddFilm}/>
       {films.map(anyFilm =>(
         <FilmItem key={anyFilm.id} film={anyFilm} deleteFilmItem={deleteFilmItem} changeFilmName={changeFilmName}/>
       ))}
