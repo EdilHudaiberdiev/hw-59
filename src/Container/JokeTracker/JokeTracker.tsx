@@ -1,42 +1,32 @@
 import {useEffect, useState} from 'react';
-import {Jokes} from '../../types';
-
+import JokeItem from '../../Components/JokeItem/JokeItem';
 
 const url = 'https://api.chucknorris.io/jokes/random';
-const JokeTracker = () => {
 
+const JokeTracker = () => {
 
     const [jokes, setJokes] = useState<string>('');
 
+  const fetchData = async () => {
+    const response = await fetch(url);
+
+    if (response.ok) {
+      const jokes = await response.json();
+      if ('value' in jokes && typeof jokes.value === "string") {
+        setJokes(jokes.value);}
+    }
+  };
 
   useEffect(() => {
-    console.log(jokes)
-  }, [jokes]);
-
-    useEffect(() => {
-      const fetchData = async () => {
-
-        const response = await fetch(url);
-
-        if (response.ok) {
-
-          const jokes = await response.json();
-          console.log(jokes);
-
-          if ('value' in jokes && typeof jokes.value === "string") {
-            setJokes(jokes.value);}
-
-        }
-      };
+    if (jokes === '') {
       void fetchData();
-    }, []);
-
-
+    }
+  }, [jokes]);
 
     return (
       <>
-        <p>{jokes}</p>
-
+        <JokeItem jokes={jokes}/>
+        <button type="button" onClick={fetchData}>Get new joke</button>
       </>
     );
   };
